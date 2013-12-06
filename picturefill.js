@@ -51,7 +51,7 @@
 					}
 
 					// if there's no type OR the type is in w.types
-					if (!type || ( w.types[type] == true) ){
+					if (!type || ( w.types[type] === true) ){
 
 						// if there's no media specified, OR w.matchMedia is supported
 						if( !media || ( w.matchMedia && w.matchMedia( media ).matches ) ){
