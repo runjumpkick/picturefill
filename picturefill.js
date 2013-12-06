@@ -39,19 +39,19 @@
 				var sources = ps[ i ].getElementsByTagName( "span" ),
 					matches = [],
 					lastType;
-					
+
 				// See if which sources match
 				for( var j = 0, jl = sources.length; j < jl; j++ ){
 					var media = sources[ j ].getAttribute( "data-media" ),
 						type = sources[ j ].getAttribute("data-type");
-						
+
 					// stop once type changes if we've already found matches
 					if( matches.length && type != lastType ){
 						break;
 					}
 
 					// if there's no type OR the type is in w.types
-					if (!type || ( w.types[type] == true) ){
+					if (!type || ( w.types[type] === true) ){
 
 						// if there's no media specified, OR w.matchMedia is supported
 						if( !media || ( w.matchMedia && w.matchMedia( media ).matches ) ){
@@ -64,7 +64,7 @@
 
 			// Find any existing img element in the picture element
 			var picImg = ps[ i ].getElementsByTagName( "img" )[ 0 ];
-			
+
 			if( matches.length ){
 				var matchedEl = matches.pop();
 				if( !picImg || picImg.parentNode.nodeName === "NOSCRIPT" ){
