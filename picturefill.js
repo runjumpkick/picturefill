@@ -18,7 +18,7 @@
 				// See if which sources match
 				for( var j = 0, jl = sources.length; j < jl; j++ ){
 					var media = sources[ j ].getAttribute( "data-media" );
-					// if there's no media specified, OR w.matchMedia is supported 
+					// if there's no media specified, OR w.matchMedia is supported
 					if( !media || ( w.matchMedia && w.matchMedia( media ).matches ) ){
 						matches.push( sources[ j ] );
 					}
@@ -32,6 +32,12 @@
 				if( !picImg || picImg.parentNode.nodeName === "NOSCRIPT" ){
 					picImg = w.document.createElement( "img" );
 					picImg.alt = ps[ i ].getAttribute( "data-alt" );
+					if (ps[ i ].getAttribute( "data-postpone" ) !== null) {
+						picImg.setAttribute( "postpone", "postpone" );
+					}
+					if (ps[ i ].getAttribute( "data-lazyload" ) !== null) {
+						picImg.setAttribute( "lazyload", "lazyload" );
+					}
 				}
 				else if( matchedEl === picImg.parentNode ){
 					// Skip further actions if the correct image is already in place
