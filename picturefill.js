@@ -39,12 +39,12 @@
 				var sources = ps[ i ].getElementsByTagName( "span" ),
 					matches = [],
 					lastType;
-					
+
 				// See if which sources match
 				for( var j = 0, jl = sources.length; j < jl; j++ ){
 					var media = sources[ j ].getAttribute( "data-media" ),
 						type = sources[ j ].getAttribute("data-type");
-						
+
 					// stop once type changes if we've already found matches
 					if( matches.length && type != lastType ){
 						break;
@@ -64,7 +64,7 @@
 
 			// Find any existing img element in the picture element
 			var picImg = ps[ i ].getElementsByTagName( "img" )[ 0 ];
-			
+
 			if( matches.length ){
 				var matchedEl = matches.pop(),
 					srcset = "srcset" in w.picturefill && w.picturefill.srcset( matchedEl );
@@ -73,6 +73,12 @@
 					picImg = w.document.createElement( "img" );
 					picImg.alt = ps[ i ].getAttribute( "data-alt" );
 					picImg.className = ps[ i ].getAttribute( "data-class" );
+					if (ps[ i ].getAttribute( "data-postpone" ) !== null) {
+						picImg.setAttribute( "postpone", "postpone" );
+					}
+					if (ps[ i ].getAttribute( "data-lazyload" ) !== null) {
+						picImg.setAttribute( "lazyload", "lazyload" );
+					}
 				}
 				else if( matchedEl === picImg.parentNode ){
 					// Skip further actions if the correct image is already in place
