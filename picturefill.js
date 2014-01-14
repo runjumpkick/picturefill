@@ -93,6 +93,18 @@
 				matchedEl.appendChild( picImg );
 				picImg.removeAttribute("width");
 				picImg.removeAttribute("height");
+
+				// add a loaded class to the parent
+				if( picImg.addEventListener ){
+					picImg.addEventListener( "load", function(){
+						this.parentNode.parentNode.className = this.parentNode.parentNode.className + ' loaded';
+					}, false );
+				}
+				else if( picImg.attachEvent ){
+					picImg.attachEvent("onload", function() {
+						this.parentNode.parentNode.className = this.parentNode.parentNode.className + ' loaded';
+					});
+				}
 			}
 			else if( picImg ){
 				picImg.parentNode.removeChild( picImg );
