@@ -10,7 +10,8 @@
 
 		// Loop the pictures
 		for( var i = 0, il = ps.length; i < il; i++ ){
-			if( ps[ i ].getAttribute( "data-picture" ) !== null ){
+			if( ps[ i ].getAttribute( "data-picture" ) !== null &&
+				(ps[ i ].getAttribute( "data-postpone" ) === null || imgVisible(ps[ i ]))){
 
 				var sources = ps[ i ].getElementsByTagName( "span" ),
 					matches = [];
@@ -32,12 +33,6 @@
 				if( !picImg || picImg.parentNode.nodeName === "NOSCRIPT" ){
 					picImg = w.document.createElement( "img" );
 					picImg.alt = ps[ i ].getAttribute( "data-alt" );
-					if (ps[ i ].getAttribute( "data-postpone" ) !== null) {
-						picImg.setAttribute( "postpone", "postpone" );
-					}
-					if (ps[ i ].getAttribute( "data-lazyload" ) !== null) {
-						picImg.setAttribute( "lazyload", "lazyload" );
-					}
 				}
 				else if( matchedEl === picImg.parentNode ){
 					// Skip further actions if the correct image is already in place
@@ -56,6 +51,21 @@
 		}
 	};
 
+	function imgVisible(el) {
+		var box = el.getBoundingClientRect();
+		return (
+			(
+				box.top >= 0 ||
+				box.left >= 0 ||
+				box.bottom >= 0 ||
+				box.right >= 0
+			) && (
+				box.top <= (window.innerHeight || document.documentElement.clientHeight) ||
+				box.bottom <= (window.innerHeight || document.documentElement.clientHeight)
+			)
+		);
+	}
+
 	// Run on resize and domready (w.load as a fallback)
 	if( w.addEventListener ){
 		w.addEventListener( "resize", w.picturefill, false );
@@ -65,6 +75,7 @@
 			w.removeEventListener( "load", w.picturefill, false );
 		}, false );
 		w.addEventListener( "load", w.picturefill, false );
+		w.addEventListener( "scroll", w.picturefill, false );
 	}
 	else if( w.attachEvent ){
 		w.attachEvent( "onload", w.picturefill );
