@@ -18,7 +18,7 @@
 				// See if which sources match
 				for( var j = 0, jl = sources.length; j < jl; j++ ){
 					var media = sources[ j ].getAttribute( "data-media" );
-					// if there's no media specified, OR w.matchMedia is supported 
+					// if there's no media specified, OR w.matchMedia is supported
 					if( !media || ( w.matchMedia && w.matchMedia( media ).matches ) ){
 						matches.push( sources[ j ] );
 					}
@@ -42,6 +42,18 @@
 				matchedEl.appendChild( picImg );
 				picImg.removeAttribute("width");
 				picImg.removeAttribute("height");
+
+				// add a loaded class to the parent
+				if( picImg.addEventListener ){
+					picImg.addEventListener( "load", function(){
+						this.parentNode.parentNode.className = this.parentNode.parentNode.className + ' loaded';
+					}, false );
+				}
+				else if( picImg.attachEvent ){
+					picImg.attachEvent("onload", function(ps, i) {
+						this.parentNode.parentNode.className = this.parentNode.parentNode.className + ' loaded';
+					});
+				}
 			}
 			else if( picImg ){
 				picImg.parentNode.removeChild( picImg );
