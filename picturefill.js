@@ -5,6 +5,28 @@
 	// Enable strict mode
 	"use strict";
 
+	w.picturescroll = function() {
+		var ps = w.document.getElementsByTagName( "span" );
+
+		// Loop the pictures
+		for( var i = 0, il = ps.length; i < il; i++ ){
+			if( ps[ i ].getAttribute( "data-picture" ) !== null &&
+				ps[ i ].getAttribute( "data-postpone" ) !== null &&
+				(
+					(
+						ps[ i ].className !== "" &&
+						new RegExp("(^|\\s)loaded(\\s|$)").test(ps[ i ].className === false)
+					) ||
+					ps[ i ].className === ""
+				) &&
+				imgVisible(ps[ i ]) ) {
+
+				w.picturefill();
+				break;
+			}
+		}
+	};
+
 	w.picturefill = function() {
 		var ps = w.document.getElementsByTagName( "span" );
 
@@ -55,10 +77,8 @@
 		var box = el.getBoundingClientRect();
 		return (
 			(
-				box.top >= 0 ||
-				box.left >= 0 ||
-				box.bottom >= 0 ||
-				box.right >= 0
+				(box.top >= 0 || box.bottom >= 0) &&
+				(box.left >= 0 || box.right >= 0)
 			) && (
 				box.top <= (window.innerHeight || document.documentElement.clientHeight) ||
 				box.bottom <= (window.innerHeight || document.documentElement.clientHeight)
@@ -67,6 +87,7 @@
 	}
 
 	// Run on resize and domready (w.load as a fallback)
+	// Also, because of `postpone`, run on scroll
 	if( w.addEventListener ){
 		w.addEventListener( "resize", w.picturefill, false );
 		w.addEventListener( "DOMContentLoaded", function(){
@@ -75,10 +96,11 @@
 			w.removeEventListener( "load", w.picturefill, false );
 		}, false );
 		w.addEventListener( "load", w.picturefill, false );
-		w.addEventListener( "scroll", w.picturefill, false );
+		w.addEventListener( "scroll", w.picturescroll, false );
 	}
 	else if( w.attachEvent ){
 		w.attachEvent( "onload", w.picturefill );
+		w.attachEvent( "onscroll", w.picturescroll );
 	}
 
 }( this ));
