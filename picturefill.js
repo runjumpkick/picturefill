@@ -15,7 +15,7 @@
 				(
 					(
 						ps[ i ].className !== "" &&
-						new RegExp("(^|\\s)loaded(\\s|$)").test(ps[ i ].className === false)
+						new RegExp("(^|\\s)loaded(\\s|$)").test(ps[ i ].className) === false
 					) ||
 					ps[ i ].className === ""
 				) &&
