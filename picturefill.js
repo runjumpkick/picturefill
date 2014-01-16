@@ -27,6 +27,10 @@
 			}
 		};
 		image.src = "data:image/webp;base64,UklGRiwAAABXRUJQVlA4ICAAAAAUAgCdASoBAAEAL/3+/3+CAB/AAAFzrNsAAP5QAAAAAA==";
+
+		// Race condition! WebP detect is asynchronous, the setTimeout
+		// should allow it to finish before picturefill runs
+		setTimeout(w.picturefill, 100);
 	};
 
 	w.picturefill = function() {
@@ -71,6 +75,10 @@
 					picImg = w.document.createElement( "img" );
 					picImg.alt = ps[ i ].getAttribute( "data-alt" );
 				}
+				else if( matchedEl === picImg.parentNode ){
+					// Skip further actions if the correct image is already in place
+					continue;
+				}
 
 				picImg.src =  matchedEl.getAttribute( "data-src" );
 				matchedEl.appendChild( picImg );
@@ -87,22 +95,13 @@
 		w.addEventListener( "resize", w.picturefill, false );
 		w.addEventListener( "DOMContentLoaded", function(){
 			w.picturedetect();
-
-			// Race condition!
-			// WebP detect is asynchronous
-			// this should allow it to finish before picturefill runs
-			setTimeout(w.picturefill, 100);
-
 			// Run once only
 			w.removeEventListener( "load", w.picturedetect, false );
-			w.removeEventListener( "load", w.picturefill, false );
 		}, false );
 		w.addEventListener( "load", w.picturedetect, false );
-		w.addEventListener( "load", w.picturefill, false );
 	}
 	else if( w.attachEvent ){
 		w.attachEvent( "onload", w.picturedetect );
-		w.attachEvent( "onload", w.picturefill );
 	}
 
 }( this ));
